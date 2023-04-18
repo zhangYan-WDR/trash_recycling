@@ -13,7 +13,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/trash_recycling?serverTimezone=GMT%2B8&characterEncoding=utf-8
     username: root
-    password: root
+    password: 123456
 
 mybatis-plus:
   configuration: #sql???????
@@ -23,3 +23,8 @@ mybatis-plus:
 logging:
   level:
     root: info
+
+wx:
+  miniapp:
+    appid: your-appid
+    appsecret: your-appsecret
