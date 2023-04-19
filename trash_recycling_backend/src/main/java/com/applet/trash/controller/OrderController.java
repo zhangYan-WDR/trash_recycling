@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
@@ -22,9 +23,13 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/save/{type}")
-    @ApiOperation("积分兑换商品订单")
+    @ApiOperation("下单接口")
     public R saveProductOrder(@RequestBody SaveOrderDo saveOrderDo,@PathVariable("type")String type){
-        Order order = orderService.saveOrderByType(saveOrderDo,type);
+        Map<String,Object> result = orderService.saveOrderByType(saveOrderDo,type);
+        if (!result.get("code").equals(0)) {
+            return R.error().setMessage((String) result.get("errorMsg"));
+        }
+        Order order = (Order) result.get("order");
         if (order != null) {
             return R.ok().setMessage("添加成功").data("order", order);
         }else {
