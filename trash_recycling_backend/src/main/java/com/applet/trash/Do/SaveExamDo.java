@@ -1,4 +1,4 @@
-package com.applet.trash.bo;
+package com.applet.trash.Do;
 
 import lombok.Data;
 

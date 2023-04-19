@@ -1,6 +1,6 @@
 package com.applet.trash.controller;
 
-import com.applet.trash.bo.SaveExamDo;
+import com.applet.trash.Do.SaveExamDo;
 import com.applet.trash.entity.CategoryDetail;
 import com.applet.trash.service.CategoryDetailService;
 import com.applet.trash.service.ExamService;
@@ -9,7 +9,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 

@@ -1,0 +1,20 @@
+package com.applet.trash.Do;
+
+import lombok.Data;
+
+@Data
+public class SaveAddressDo {
+
+    private String userName;
+
+    private String userPhone;
+
+    private String locationAddress;
+
+    private String detailedAddress;
+
+    private String sex;
+
+    private Boolean isDefault;
+
+}

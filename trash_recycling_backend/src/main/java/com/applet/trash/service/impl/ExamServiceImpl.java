@@ -1,13 +1,12 @@
 package com.applet.trash.service.impl;
 
-import com.applet.trash.bo.SaveExamDo;
+import com.applet.trash.Do.SaveExamDo;
 import com.applet.trash.entity.CategoryDetail;
 import com.applet.trash.entity.Exam;
 import com.applet.trash.interceptor.UserInfoHolder;
 import com.applet.trash.mapper.ExamMapper;
 import com.applet.trash.service.*;
 import com.applet.trash.util.OrderNoUtils;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
