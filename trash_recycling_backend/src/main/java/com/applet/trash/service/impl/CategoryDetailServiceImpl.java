@@ -2,6 +2,8 @@ package com.applet.trash.service.impl;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.applet.trash.entity.CategoryDetail;
 import com.applet.trash.mapper.CategoryDetailMapper;
@@ -11,6 +13,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.internal.LinkedTreeMap;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,10 +34,10 @@ public class CategoryDetailServiceImpl extends ServiceImpl<CategoryDetailMapper,
     private CategoryDetailService categoryDetailService;
 
     @Value("${baidu.cloud.image.apiKey}")
-    private String apiKey;
+    private String imgApiKey;
 
     @Value("${baidu.cloud.image.secretKey}")
-    private String secretKey;
+    private String imgSecretKey;
 
     static final OkHttpClient HTTP_CLIENT = new OkHttpClient().newBuilder().build();
 
@@ -100,7 +103,7 @@ public class CategoryDetailServiceImpl extends ServiceImpl<CategoryDetailMapper,
         //去掉编码头（data:image/jpg;base64,）后，再进行urlEncode编码
         String urlString = URLEncoder.encode(baseEncode, "utf-8");
         //获取百度智能云的auth_token
-        String baiduAuthToken = this.getBaiduAuthToken();
+        String baiduAuthToken = this.getBaiduAuthToken(imgApiKey,imgSecretKey);
         //组装请求路径
         String baseUrl = "https://aip.baidubce.com/rest/2.0/image-classify/v2/advanced_general?access_token=".concat(baiduAuthToken);
         String json = "image=".concat(urlString);
@@ -115,7 +118,11 @@ public class CategoryDetailServiceImpl extends ServiceImpl<CategoryDetailMapper,
         Response response = HTTP_CLIENT.newCall(request).execute();
         String responseString = response.body().string();
         log.info("获取到的数据为:->{}",responseString);
-        return responseString;
+        JSONObject jsonObject = new Gson().fromJson(responseString, JSONObject.class);
+        ArrayList list = (ArrayList) jsonObject.get("result");
+        LinkedTreeMap keyword = (LinkedTreeMap) list.get(0);
+        String result = (String) keyword.get("keyword");
+        return result;
     }
 
     /**
@@ -168,7 +175,7 @@ public class CategoryDetailServiceImpl extends ServiceImpl<CategoryDetailMapper,
      * 获取百度智能云的auth_token
      * Api文档参考地址:https://ai.baidu.com/ai-doc/REFERENCE/Ck3dwjhhu
      */
-    public String getBaiduAuthToken() {
+    public String getBaiduAuthToken(String apiKey,String secretKey) {
         String url = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=".concat(apiKey).concat("&client_secret=").concat(secretKey);
         String post = HttpUtil.post(url, "");
         JSONObject jsonObject = new Gson().fromJson(post, JSONObject.class);

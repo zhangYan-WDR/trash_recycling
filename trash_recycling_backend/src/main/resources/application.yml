@@ -32,6 +32,8 @@ wx:
 baidu:
   cloud:
     image:
-      appid: 32596264
       apiKey: nLYqXZtiy16R8GGD88jsBNKl
       secretKey: CfU4zztCvQRwCz6dZh8mwQvXFBuU5jZy
+    voice:
+      apiKey: 0uqjaGHyd19SU8ZyBYlNgGif
+      secretKey: uZwHh02YLCeGFbEG0Tk3GKWIjEuIR58h

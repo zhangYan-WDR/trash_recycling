@@ -15,6 +15,6 @@ public interface CategoryDetailService extends IService<CategoryDetail> {
 
     String getCategoryDetailByImage(MultipartFile file) throws IOException;
 
-    String getBaiduAuthToken();
+    String getBaiduAuthToken(String apiKey,String secretKey);
 
 }

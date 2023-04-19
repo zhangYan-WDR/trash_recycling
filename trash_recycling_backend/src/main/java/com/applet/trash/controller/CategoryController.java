@@ -7,6 +7,7 @@ import com.applet.trash.service.CategoryService;
 import com.applet.trash.vo.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +27,12 @@ public class CategoryController {
 
     @Resource
     private CategoryDetailService categoryDetailService;
+
+    @Value("${baidu.cloud.image.apiKey}")
+    private String imgApiKey;
+
+    @Value("${baidu.cloud.image.secretKey}")
+    private String imgSecretKey;
 
     @GetMapping("/list")
     @ApiOperation("查询垃圾分类大类数据和对应描述")
@@ -51,7 +58,7 @@ public class CategoryController {
     @GetMapping("/authToken")
     @ApiOperation("测试百度云鉴权token")
     public R getBaiduCloudToken(){
-        String keyword = categoryDetailService.getBaiduAuthToken();
+        String keyword = categoryDetailService.getBaiduAuthToken(imgApiKey,imgSecretKey);
         return R.ok().data("data", keyword);
     }
 
