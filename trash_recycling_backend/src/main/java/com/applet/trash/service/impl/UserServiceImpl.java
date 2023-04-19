@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.applet.trash.entity.User;
 import com.applet.trash.mapper.UserMapper;
 import com.applet.trash.service.UserService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import springfox.documentation.spring.web.json.Json;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -50,7 +52,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         result.put("openid", openid);
         result.put("session_key", sessionKey);
         result.put("unionid", unionid);
+        //查询登录用户信息
+        User user = saveOrUpdateUserByOpenId(openid);
+        Gson gson = new Gson();
+        String userJson = gson.toJson(user);
+        result.put("user", userJson);
         return result;
+    }
+
+    private User saveOrUpdateUserByOpenId(String openid) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getUserCode, openid);
+        User user = baseMapper.selectOne(wrapper);
+        if (user == null) {
+            //用户首次登录需要入库
+            user = new User();
+            user.setId(UUID.randomUUID().toString());
+            user.setUserCode(openid);
+            //TODO 查询用户名称和用户手机号入库
+            user.setUserName("");
+            user.setPhone("");
+            user.setPersonalPoints(0);
+            baseMapper.insert(user);
+        }
+        return user;
     }
 
     @Override
