@@ -4,6 +4,8 @@ import com.applet.trash.bo.SaveExamDo;
 import com.applet.trash.entity.Exam;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 public interface ExamService extends IService<Exam> {
-    void saveExam(SaveExamDo saveExamDo);
+    void saveExam(List<SaveExamDo> saveExamDos);
 }

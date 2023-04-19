@@ -34,8 +34,8 @@ public class ExamController {
 
     @PostMapping("/notify/save")
     @ApiOperation("根据考试结果进行添加考试日志并修改当前用户的积分")
-    public R saveExam(@RequestBody SaveExamDo saveExamDo){
-        examService.saveExam(saveExamDo);
+    public R saveExam(@RequestBody List<SaveExamDo> saveExamDos){
+        examService.saveExam(saveExamDos);
         return R.ok().setMessage("添加成功");
     }
 

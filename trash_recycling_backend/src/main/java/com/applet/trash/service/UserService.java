@@ -9,4 +9,7 @@ public interface UserService extends IService<User> {
     Map<String, String> login(String code);
 
     String getPhoneByUser(String code);
+
+    void addPointByExam(String userCode);
+
 }

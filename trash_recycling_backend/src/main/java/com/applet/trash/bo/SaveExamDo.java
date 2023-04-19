@@ -5,10 +5,12 @@ import lombok.Data;
 @Data
 public class SaveExamDo {
 
-    private Integer score;
+    private int id;
 
-    private Integer testSuccessNum;
+    private int categoryId;
 
-    private Integer testWrongNum;
+    private String detailName;
+
+    private String categoryName;
 
 }

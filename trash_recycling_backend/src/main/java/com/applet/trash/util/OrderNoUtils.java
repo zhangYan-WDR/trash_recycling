@@ -24,11 +24,11 @@ public class OrderNoUtils {
      * 获取退款单编号
      * @return
      */
-    public static String getRefundNo() {
-        return "REFUND_" + getNo();
+    public static String getIntegralNO() {
+        return "GRAL_" + getNo();
     }
     public static String getExamRecordNo() {
-        return "EXAM" + getNo();
+        return "EXAM_" + getNo();
     }
 
     /**

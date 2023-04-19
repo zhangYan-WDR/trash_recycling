@@ -88,4 +88,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String responseJson = HttpUtil.post(baseUrl, bodyJson);
         return responseJson;
     }
+
+    @Override
+    public void addPointByExam(String userCode) {
+        //查询当前用户的积分
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getUserCode, userCode);
+        User user = baseMapper.selectOne(wrapper);
+        Integer personalPoints = user.getPersonalPoints();
+        //考试积分添加30
+        personalPoints = personalPoints + 30;
+        user.setPersonalPoints(personalPoints);
+        baseMapper.updateById(user);
+    }
 }
