@@ -1,15 +1,10 @@
-package com.applet.trash.entity;
+package com.applet.trash.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("td_order")
-public class Order {
+public class OrderVO {
 
-    @TableId(value = "id", type = IdType.UUID)
     private String id;
 
     private String orderNo;
@@ -24,10 +19,18 @@ public class Order {
 
     private String productId;
 
-    private String RecoveryId;
+    private String RecoveryNo;
 
     private String RecoveryHight;
 
     private String UserCode;
+
+    private String productName;
+    private int productIntegral;
+    private int productNum;
+    private String productTitle;
+    private String productImage;
+    private int productPrice;
+    private String recoveryName;
 
 }
