@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class RecoveryController {
     @Resource
     private RecoveryService recoveryService;
 
-    @RequestMapping("/list")
+    @GetMapping("/list")
     @ApiOperation("回收分类列表")
     public R list(){
         List<Recovery> list = recoveryService.list();
