@@ -44,8 +44,10 @@ public class IntegralServiceImpl extends ServiceImpl<IntegralMapper, Integral> i
         }
         integral.setIsAdd(true);
         integral.setUserCode(userCode);
+        integral.setCreateTime(new Date());
         resultMap.put("code", "0");
         baseMapper.insert(integral);
+        //TODO 用户添加积分
         return resultMap;
     }
 }
