@@ -6,6 +6,7 @@ import com.applet.trash.service.ProductService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -14,7 +15,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public List<Product> getListByTitle(String title) {
         LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Product::getProductTitle, title);
+        if (!StringUtils.isEmpty(title)) {
+            wrapper.like(Product::getProductTitle, title);
+        }
         List<Product> products = baseMapper.selectList(wrapper);
         for (Product product : products) {
             product.setProductImage("http://localhost:8080"+product.getProductImage());

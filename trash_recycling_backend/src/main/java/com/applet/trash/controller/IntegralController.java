@@ -30,4 +30,6 @@ public class IntegralController {
         }
     }
 
+    //TODO：当前用户积分变动列表
+
 }
