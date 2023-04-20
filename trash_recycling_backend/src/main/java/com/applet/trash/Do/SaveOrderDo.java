@@ -9,7 +9,7 @@ public class SaveOrderDo {
 
     private String orderAddressNo;
 
-    private String productId;
+    private int productId;
 
     private String RecoveryId;
 

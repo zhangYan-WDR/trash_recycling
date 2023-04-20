@@ -22,7 +22,7 @@ public class Order {
 
     private String orderType;
 
-    private String productId;
+    private int productId;
 
     private String RecoveryId;
 

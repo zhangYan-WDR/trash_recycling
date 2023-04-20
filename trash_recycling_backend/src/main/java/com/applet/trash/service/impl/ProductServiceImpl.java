@@ -16,6 +16,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Product::getProductTitle, title);
         List<Product> products = baseMapper.selectList(wrapper);
+        for (Product product : products) {
+            product.setProductImage("http://localhost:8080"+product.getProductImage());
+        }
         return products;
     }
 }
