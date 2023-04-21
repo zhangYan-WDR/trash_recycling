@@ -2,10 +2,7 @@ package com.applet.trash.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.applet.trash.Do.SaveOrderDo;
-import com.applet.trash.entity.Order;
-import com.applet.trash.entity.Product;
-import com.applet.trash.entity.Recovery;
-import com.applet.trash.entity.User;
+import com.applet.trash.entity.*;
 import com.applet.trash.interceptor.UserInfoHolder;
 import com.applet.trash.mapper.OrderMapper;
 import com.applet.trash.service.*;
@@ -30,6 +27,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private IntegralService integralService;
 
     @Override
     public Map<String,Object> saveOrderByType(SaveOrderDo saveOrderDo, String type) {
@@ -81,16 +81,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
         order.setOrderType("recovery");
         order.setUserCode(UserInfoHolder.userInfo.get());
         //积分商城兑换商品
-        //1.先判断当前用户是否有这么多积分
-        LambdaQueryWrapper<User> userWrapper = new LambdaQueryWrapper<>();
-        userWrapper.eq(User::getUserCode, UserInfoHolder.userInfo.get());
-        User user = userService.getOne(userWrapper);
-        if (user.getPersonalPoints() < saveOrderDo.getOrderPrice()) {
-            resultMap.put("code", -1);
-            resultMap.put("errorMsg", "当前用户积分不足");
-            return resultMap;
-        }
-        //2.判断当前商品是否有库存
+        //1.判断当前商品是否有库存
         LambdaQueryWrapper<Product> productWrapper = new LambdaQueryWrapper<>();
         productWrapper.eq(Product::getId, saveOrderDo.getProductId());
         Product product = productService.getOne(productWrapper);
@@ -99,10 +90,33 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
             resultMap.put("errorMsg", "当前商品库存不足");
             return resultMap;
         }
+        //2.先判断当前用户是否有这么多积分
+        LambdaQueryWrapper<User> userWrapper = new LambdaQueryWrapper<>();
+        userWrapper.eq(User::getUserCode, UserInfoHolder.userInfo.get());
+        User user = userService.getOne(userWrapper);
+        if (user.getPersonalPoints() < product.getProductIntegral()) {
+            resultMap.put("code", -1);
+            resultMap.put("errorMsg", "当前用户积分不足");
+            return resultMap;
+        }
         //3.如果有库存，下单了之后将库存减1
         product.setProductNum(product.getProductNum() - 1);
         productService.updateById(product);
         baseMapper.insert(order);
+        //4.更新用户剩余的积分
+        user.setPersonalPoints(user.getPersonalPoints()-product.getProductIntegral());
+        userService.updateById(user);
+        //5.生成一条积分减少记录
+        Integral integral = new Integral();
+        integral.setId(UUID.randomUUID().toString());
+        integral.setIntegralNo(OrderNoUtils.getIntegralNO());
+        integral.setIntegralTitle("购买"+product.getProductTitle());
+        integral.setIsAdd(false);
+        integral.setIntegralUpdate("-"+product.getProductIntegral()+".00");
+        integral.setUserCode(UserInfoHolder.userInfo.get());
+        integral.setCreateTime(new Date());
+        integralService.save(integral);
+        //6.构建返回参数
         resultMap.put("order", order);
         resultMap.put("code", 0);
         return resultMap;

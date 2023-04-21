@@ -50,4 +50,13 @@ public class IntegralServiceImpl extends ServiceImpl<IntegralMapper, Integral> i
         //TODO 用户添加积分
         return resultMap;
     }
+
+    @Override
+    public List<Integral> getListByUser() {
+        LambdaQueryWrapper<Integral> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Integral::getCreateTime);
+        queryWrapper.eq(Integral::getUserCode, UserInfoHolder.userInfo.get());
+        List<Integral> integrals = baseMapper.selectList(queryWrapper);
+        return integrals;
+    }
 }

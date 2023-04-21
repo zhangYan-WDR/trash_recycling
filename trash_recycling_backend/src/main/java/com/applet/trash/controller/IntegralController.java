@@ -1,5 +1,6 @@
 package com.applet.trash.controller;
 
+import com.applet.trash.entity.Integral;
 import com.applet.trash.interceptor.UserInfoHolder;
 import com.applet.trash.service.IntegralService;
 import com.applet.trash.vo.R;
@@ -8,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -31,5 +33,11 @@ public class IntegralController {
     }
 
     //TODO：当前用户积分变动列表
+    @GetMapping("/list")
+    @ApiOperation("积分变动信息")
+    public R integralList(){
+        List<Integral> list = integralService.getListByUser();
+        return R.ok().setMessage("查询成功").data("list", list);
+    }
 
 }
