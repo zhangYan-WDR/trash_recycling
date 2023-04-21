@@ -32,7 +32,7 @@ public class IntegralController {
         }
     }
 
-    //TODO：当前用户积分变动列表
+    //当前用户积分变动列表
     @GetMapping("/list")
     @ApiOperation("积分变动信息")
     public R integralList(){
